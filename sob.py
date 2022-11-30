@@ -73,7 +73,7 @@ if selected == "Pre-Processing":
     y=data_hf.iloc[:,10].values
     from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
-    y = le.fit_transform👍
+    y = le.fit_transform
     
     from sklearn.preprocessing import MinMaxScaler
     scaler = MinMaxScaler()
@@ -182,7 +182,7 @@ if selected == "Implementation":
     y=data_hf.iloc[:,10].values
     from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
-    y = le.fit_transform👍
+    y = le.fit_transform
 
     #Train and Test split
     X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=0)
