@@ -23,6 +23,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import svm
 from sklearn import metrics 
 from sklearn import preprocessing 
+
 from streamlit_option_menu import option_menu
 
 with st.sidebar:
@@ -68,8 +69,8 @@ if selected == "Datasets":
 if selected == "Pre-Processing":
     st.title(f"{selected}")
     data_hf = pd.read_csv("https://raw.githubusercontent.com/08-Ahlaqul-Karimah/machine-Learning/main/Global%20cancer%20incidence%20both%20sexes%20(1).csv")
-    X=data_hf.iloc[:,0:10].values 
-    y=data_hf.iloc[:,10].values
+    X=data_hf.iloc[:,0:5].values 
+    y=data_hf.iloc[:,5].values
     from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
     y = le.fit_transform
@@ -87,8 +88,8 @@ if selected == "Modelling":
     st.title(f"{selected}")
     st.write(""" ### Decision Tree, Random Forest, SVM """)
     data_hf = pd.read_csv("https://raw.githubusercontent.com/08-Ahlaqul-Karimah/machine-Learning/main/Global%20cancer%20incidence%20both%20sexes%20(1).csv")
-    X=data_hf.iloc[:,0:10].values 
-    y=data_hf.iloc[:,10].values
+    X=data_hf.iloc[:,0:5].values 
+    y=data_hf.iloc[:,5].values
     from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
     y = le.fit_transform
@@ -177,8 +178,8 @@ if selected == "Implementation":
     algoritma=st.selectbox('Pilih', ('Decision Tree','Random Forest','SVM'))
 
     data_hf = pd.read_csv("https://raw.githubusercontent.com/08-Ahlaqul-Karimah/machine-Learning/main/Global%20cancer%20incidence%20both%20sexes%20(1).csv")
-    X=data_hf.iloc[:,0:10].values 
-    y=data_hf.iloc[:,10].values
+    X=data_hf.iloc[:,0:5].values 
+    y=data_hf.iloc[:,5].values
     from sklearn.preprocessing import LabelEncoder
     le = LabelEncoder()
     y = le.fit_transform
