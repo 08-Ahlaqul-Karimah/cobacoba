@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn import preprocessing
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -22,90 +24,33 @@ from sklearn.utils.validation import joblib
 
 
 st.title("PENAMBANGAN DATA")
-st.write("By: Sobariyah Maghfiroh - 200411100188")
+st.write("By: Febrian Achmad Syahputra")
 st.write("Grade: Penambangan Data C")
-upload_data, preporcessing, modeling, implementation = st.tabs(["Upload Data", "Prepocessing", "Modeling", "Implementation"])
+upload_data,deskripsi, preporcessing, modeling, implementation = st.tabs(["Upload Data",'deskripsi' ,"Prepocessing", "Modeling", "Implementation"])
 
 
 with upload_data:
     st.write("""# Upload File""")
-    st.write("Dataset yang digunakan adalah healthcare-dataset-stroke-data dataset yang diambil dari https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset")
-    st.write("Total datanya adalah 5110 dengan data training 80% (4088) dan data testing 20% (1022)")
-    uploaded_files = st.file_uploader("Upload file CSV", accept_multiple_files=True) 
+    st.write("Dataset yang digunakan adalah harumanis mango classification dataset yang diambil dari https://www.kaggle.com/code/kwonnnyr/harumanis-mango-classification-with-2-method/data")
+    st.write("Pada Dataset yang saya gunakan terdapat 3 fitur yaitu weight,lenght,dan circumference. Pada weight akan menunjukan berat dari mangga ,kemudian pada lenght akan menunjukan panjang dari mangga , dan yang terakhir terdapat circumference yang menunjukan lingkar dari mangga ")
+
+    
+    uploaded_files = st.file_uploader("Upload file CSV", accept_multiple_files=True)
     for uploaded_file in uploaded_files:
         df = pd.read_csv(uploaded_file)
         st.write("Nama File Anda = ", uploaded_file.name)
         st.dataframe(df)
 
+with deskripsi:
+
+    st.write("Dataset yang digunakan adalah harumanis mango classification dataset yang diambil dari https://www.kaggle.com/code/kwonnnyr/harumanis-mango-classification-with-2-method/data")
+    st.write("Pada Dataset yang saya gunakan terdapat 3 fitur yaitu weight,lenght,dan circumference. Pada weight akan menunjukan berat dari mangga ,kemudian pada lenght akan menunjukan panjang dari mangga , dan yang terakhir terdapat circumference yang menunjukan lingkar dari mangga ")
 
 with preporcessing:
     st.write("""# Preprocessing""")
-    df[["gender", "age", "hypertension", "heart_disease", "ever_married", "work_type", "Residence_type", "avg_glucose_level", "smoking_status"]].agg(['min','max'])
-
-    df.stroke.value_counts()
-    df = df.drop(columns=["id","bmi"])
-
-    X = df.drop(columns="stroke")
-    y = df.stroke
-    "### Membuang fitur yang tidak diperlukan"
-    df
-
-    le = preprocessing.LabelEncoder()
-    le.fit(y)
-    y = le.transform(y)
-
-    "### Transformasi Label"
-    y
-
-    le.inverse_transform(y)
-
-    labels = pd.get_dummies(df.stroke).columns.values.tolist()
-
-    "### Label"
-    labels
-
-    st.markdown("# Normalize")
-
-    "### Normalize data"
-
-    dataubah=df.drop(columns=['gender','ever_married','work_type','Residence_type','smoking_status'])
-    dataubah
-
-    "### Normalize data gender"
-    data_gen=df[['gender']]
-    gen = pd.get_dummies(data_gen)
-    gen
-
-    # "### Normalize data Hypertension"
-    # data_hypertension=df[['hypertension']]
-    # hypertension = pd.get_dummies(data_hypertension)
-    # hypertension
-
-    "### Normalize data married"
-    data_married=df[['ever_married']]
-    married = pd.get_dummies(data_married)
-    married
-
-    "### Normalize data work"
-    data_work=df[['work_type']]
-    work = pd.get_dummies(data_work)
-    work
-
-    "### Normalize data residence"
-    data_residence=df[['Residence_type']]
-    residence = pd.get_dummies(data_residence)
-    residence
-
-    "### Normalize data smoke"
-    data_smoke=df[['smoking_status']]
-    smoke = pd.get_dummies(data_smoke)
-    smoke
-
-    dataOlah = pd.concat([gen,married,work,residence,smoke], axis=1)
-    dataHasil = pd.concat([df,dataOlah], axis = 1)
-
-    X = dataHasil.drop(columns=["gender","ever_married","work_type","Residence_type","smoking_status","stroke"])
-    y = dataHasil.stroke
+    df[['No','Weight','Length','Circumference','Grade']].agg(['min','max'])
+    X = df.drop(labels = ['Grade','No'],axis = 1)
+    y = df['Grade']
     "### Normalize data hasil"
     X
 
@@ -117,9 +62,8 @@ with preporcessing:
 
     X.shape, y.shape
 
-    le.inverse_transform(y)
 
-    labels = pd.get_dummies(dataHasil.stroke).columns.values.tolist()
+    labels = pd.get_dummies(df.Grade).columns.values.tolist()
     
     "### Label"
     labels
@@ -134,7 +78,12 @@ with preporcessing:
 
     X.shape, y.shape
 
+    le = preprocessing.LabelEncoder()
+    le.fit(y)
+    y = le.transform(y)
+    y
 
+    le.inverse_transform(y)
 
 with modeling:
     X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2,random_state=4)
@@ -282,172 +231,15 @@ with modeling:
 
 with implementation:
     st.write("# Implementation")
-    Age = st.number_input('Masukkan Umur Pasien')
-
-    # GENDER
-    gender = st.radio("Gender",('Male', 'Female', 'Other'))
-    if gender == "Male":
-        gen_Female = 0
-        gen_Male = 1
-        gen_Other = 0
-    elif gender == "Female" :
-        gen_Female = 1
-        gen_Male = 0
-        gen_Other = 0
-    elif gender == "Other" :
-        gen_Female = 0
-        gen_Male = 0
-        gen_Other = 1
-
-    # HYPERTENSION
-    hypertension = st.radio("Hypertency",('No', 'Yes'))
-    if hypertension == "Yes":
-        hypertension = 1
-    elif hypertension == "No":
-        hypertension = 0
-    
-    # HEART
-    heart_disease = st.radio("heart_disease",('No', 'Yes'))
-    if heart_disease == "Yes":
-        heart_disease = 1
-        # heart_disease_N = 0
-    elif heart_disease == "No":
-        heart_disease = 0
-        # heart_disease_N = 1
-
-    # MARRIED
-    ever_married = st.radio("ever_married",('No', 'Yes'))
-    if ever_married == "Yes":
-        ever_married_Y = 1
-        ever_married_N = 0
-    elif ever_married == "No":
-        ever_married_Y = 0
-        ever_married_N = 1
-
-    # WORK
-    work_type = st.radio("work_type",('Govt_job', 'Never_worked','Private', 'Self_employed', 'childern'))
-    if work_type == "Govt_job":
-        work_type_G = 1
-        work_type_Never = 0
-        work_type_P = 0
-        work_type_S = 0
-        work_type_C = 0
-    elif work_type == "Never_worked":
-        work_type_G = 0
-        work_type_Never = 1
-        work_type_P = 0
-        work_type_S = 0
-        work_type_C = 0
-    elif work_type == "Private":
-        work_type_G = 0
-        work_type_Never = 0
-        work_type_P = 1
-        work_type_S = 0
-        work_type_C = 0
-    elif work_type == "Self_employed":
-        work_type_G = 0
-        work_type_Never = 0
-        work_type_P = 0
-        work_type_S = 1
-        work_type_C = 0
-    elif work_type == "childern":
-        work_type_G = 0
-        work_type_Never = 0
-        work_type_P = 0
-        work_type_S = 0
-        work_type_C = 1
-
-    # RESIDENCE
-    residence_type = st.radio("residence_type",('Rural', 'Urban'))
-    if residence_type == "Rural":
-        residence_type_R = 1
-        residence_type_U = 0
-    elif residence_type == "Urban":
-        residence_type_R = 0
-        residence_type_U = 1
-
-    # GLUCOSE
-    avg_glucose_level = st.number_input('Masukkan Angka glukosa')
-    
-    # SMOKE
-    smoking_status = st.radio("smoking_status",('Unknown', 'Formerly smoked', 'never smoked', 'smokes'))
-    if smoking_status == "Unknown":
-        smoking_status_U = 1
-        smoking_status_F = 0
-        smoking_status_N = 0
-        smoking_status_S = 0
-    elif smoking_status == "Formerly smoked":
-        smoking_status_U = 0
-        smoking_status_F = 1
-        smoking_status_N = 0
-        smoking_status_S = 0
-    elif smoking_status == "never smoked":
-        smoking_status_U = 0
-        smoking_status_F = 0
-        smoking_status_N = 1
-        smoking_status_S = 0
-    elif smoking_status == "smokes":
-        smoking_status_U = 0
-        smoking_status_F = 0
-        smoking_status_N = 0
-        smoking_status_S = 1
-        
-    bmi = st.number_input('Masukkan BMI')
-
-    
-    # Sex = st.radio(
-    # "Masukkan Jenis Kelamin Anda",
-    # ('Laki-laki','Perempuan'))
-    # if Sex == "Laki-laki":
-    #     Sex_Female = 0
-    #     Sex_Male = 1
-    # elif Sex == "Perempuan" :
-    #     Sex_Female = 1
-    #     Sex_Male = 0
-
-    # BP = st.radio(
-    # "Masukkan Tekanan Darah Anda",
-    # ('Tinggi','Normal','Rendah'))
-    # if BP == "Tinggi":
-    #     BP_High = 1
-    #     BP_LOW = 0
-    #     BP_NORMAL = 0
-    # elif BP == "Normal" :
-    #     BP_High = 0
-    #     BP_LOW = 0
-    #     BP_NORMAL = 1
-    # elif BP == "Rendah" :
-    #     BP_High = 0
-    #     BP_LOW = 1
-    #     BP_NORMAL = 0
-
-    # Cholesterol = st.radio(
-    # "Masukkan Kadar Kolestrol Anda",
-    # ('Tinggi','Normal'))
-    # if Cholesterol == "Tinggi" :
-    #     Cholestrol_High = 1
-    #     Cholestrol_Normal = 0 
-    # elif Cholesterol == "Normal":
-    #     Cholestrol_High = 0
-    #     Cholestrol_Normal = 1
-        
-    # Na_to_K = st.number_input('Masukkan Rasio Natrium Ke Kalium dalam Darah')
-
-
+    Weight = st.number_input('Masukkan Berat Mangga')
+    Length = st.number_input('Masukkan Panjnag Mangga')
+    circumference = st.number_input('Masukkan Lingkar Mangga')
 
     def submit():
         # input
         inputs = np.array([[
-            Age,
-            hypertension,
-            heart_disease,
-            avg_glucose_level,
-            gen_Female, gen_Male, gen_Other,
-            ever_married_N, ever_married_Y,
-            work_type_G, work_type_Never, work_type_P, work_type_S, work_type_C,
-            residence_type_R, residence_type_U,
-            smoking_status_U, smoking_status_F, smoking_status_N, smoking_status_S, bmi
-            ]])
+            Weight,Length,circumference
+        ]])
         # st.write(inputs)
         # baru = pd.DataFrame(inputs)
         # input = pd.get_dummies(baru)
@@ -455,9 +247,13 @@ with implementation:
         # inputan = np.array(input)
         # import label encoder
         le = joblib.load("le.save")
-        model1 = joblib.load("knn.joblib")
+        model1 = joblib.load("tre.joblib")
         y_pred3 = model1.predict(inputs)
-        st.write(f"Berdasarkan data yang Anda masukkan, maka anda dinyatakan : {le.inverse_transform(y_pred3)[0]}")
+        if le.inverse_transform(y_pred3)[0]==1:
+            hasilakhir='B'
+        else :
+            hasilakhir='A'
+        st.write(f"Berdasarkan data yang Anda masukkan, maka mangga dinyatakan mangga memiliki grade: {hasilakhir}")
 
     all = st.button("Submit")
     if all :
