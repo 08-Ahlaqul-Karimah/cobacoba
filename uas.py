@@ -31,7 +31,7 @@ with upload_data:
     st.write("""# Upload File""")
     st.write("Dataset yang digunakan adalah healthcare-dataset-stroke-data dataset yang diambil dari https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset")
     st.write("Total datanya adalah 5110 dengan data training 80% (4088) dan data testing 20% (1022)")
-    uploaded_files = st.file_uploader("Upload file CSV", accept_multiple_files=True)
+    uploaded_files = st.file_uploader("Upload file CSV", accept_multiple_files=True) 
     for uploaded_file in uploaded_files:
         df = pd.read_csv(uploaded_file)
         st.write("Nama File Anda = ", uploaded_file.name)
